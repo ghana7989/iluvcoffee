@@ -1,13 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, DataSource, In, Repository } from 'typeorm';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { Event } from 'src/events/entities/event.entity';
+import { DataSource, Repository } from 'typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
 import { Flavor } from './entities/flavor.entity';
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { Event } from 'src/events/entities/event.entity';
-import { ConfigService } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
 
 @Injectable()
 export class CoffeesService {
@@ -16,12 +17,11 @@ export class CoffeesService {
     private readonly coffeeRepository: Repository<Coffee>,
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
-    private readonly configService: ConfigService,
     private readonly dataSource: DataSource,
+    @Inject(coffeesConfig.KEY)
+    private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>,
   ) {
-    const databaseHost = this.configService.get('database.host');
-    const databasePort = this.configService.get<number>('DATABASE_PORT');
-    console.log({ databaseHost, databasePort });
+    console.log('coffeesConfig: ', this.coffeesConfiguration.database.host);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
