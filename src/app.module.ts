@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { APP_PIPE } from '@nestjs/core';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { APP_PIPE } from '@nestjs/core';
         synchronize: true,
       }),
     }),
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
