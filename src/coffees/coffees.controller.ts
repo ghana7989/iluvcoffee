@@ -30,6 +30,7 @@ export class CoffeesController {
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     const coffee = this.coffeeService.findOne(id);
     if (!coffee) {
